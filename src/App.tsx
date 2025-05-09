@@ -1,5 +1,7 @@
+import LoginForm from './features/auth/loginForm';
+
 function App() {
-  return <p className="bg-amber-500">gola</p>;
+  return <LoginForm />;
 }
 
 export default App;
