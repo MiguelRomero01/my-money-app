@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import AuthHeader from '../../components/auth/authHeader';
-import SliderButton from '../../components/auth/SliderButton';
+import { useState } from 'react';
 import InputText from '../../components/auth/inputText';
 import InputPassword from '../../components/auth/inputPassword';
 import Button from '../../components/auth/button';
+import { signUpUser } from './authService';
 
 const RegisterForm = () => {
   const [PasswordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -12,29 +11,41 @@ const RegisterForm = () => {
   const [password, setPassword] = useState<string>('');
   const [repeatPassword, setRepeatPassword] = useState<string>('');
 
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
 
   const [Ischecked, setIsChecked] = useState<boolean>(false);
 
+  async function handleSubmit() {
+    if (email === '' || password === '' || repeatPassword === '') {
+      alert('You must fill all the fields');
+    } else if (password !== repeatPassword) {
+      alert("The passwords doesn't match");
+    } else if (Ischecked === false) {
+      alert('You must accept the terms and conditions');
+    } else {
+      try {
+        const x = await signUpUser(email, password);
+        alert(x);
+      } catch (error) {
+        alert(error);
+      }
+    }
+  }
+
   return (
-    <div className="w-full max-w-md px-5">
-      <header>
-        <AuthHeader
-          title="Welcome Back"
-          description="Enter your credentials to access your account"
-        />
-      </header>
-
-      <div>
-        <SliderButton currentWindow="register" />
-      </div>
-
-      <form className="px-4 py-5">
+    <div>
+      <form
+        className="px-4 py-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <InputText
-          label="Username"
-          type="text"
-          placeholder="fakeUser123"
-          setUsername={setUsername}
+          label="Email"
+          type="email"
+          placeholder="fakeUser123@email.com"
+          setUsername={setEmail}
         />
 
         <InputPassword
@@ -76,7 +87,7 @@ const RegisterForm = () => {
           </a>
         </label>
 
-        <Button label="Sign Up" />
+        <Button label="Sign Up" type="submit" />
       </form>
     </div>
   );
