@@ -1,4 +1,4 @@
-import { supabase } from '../../services/database/dbConnection.ts';
+import { supabase } from '@services/database/dbConnection';
 
 export async function signUpUser(email: string, password: string) {
   const { error } = await supabase.auth.signUp({
