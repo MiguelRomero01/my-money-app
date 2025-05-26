@@ -18,3 +18,16 @@ export async function signUpUser(email: string, password: string) {
 
   return 'User registered successfully!';
 }
+
+export async function signInUser(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return null;
+  }
+
+  return data;
+}
