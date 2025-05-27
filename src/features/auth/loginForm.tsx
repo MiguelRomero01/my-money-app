@@ -3,6 +3,7 @@ import InputText from '../../components/auth/inputText';
 import InputPassword from '../../components/auth/inputPassword';
 import Button from '../../components/auth/button';
 import { signInUser } from './authService';
+import { simpleAlert } from '@components/alerts/simpleAlert';
 
 const LoginForm = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -11,11 +12,19 @@ const LoginForm = () => {
   const [username, setUsername] = useState<string>('');
 
   async function handleSubmit() {
-    const y = await signInUser(username, password);
-    if (!y) {
-      alert('Error al iniciar sesión');
-    } else {
-      alert('Inicio de sesión exitoso');
+    try {
+      const userSignIn = await signInUser(username, password);
+
+      if (!userSignIn) {
+        simpleAlert({
+          title: 'Error',
+          text: 'Your username or password is incorrect',
+          type: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    } catch (error) {
+      alert(error);
     }
   }
 

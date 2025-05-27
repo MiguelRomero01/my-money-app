@@ -15,7 +15,7 @@ const RegisterForm = () => {
 
   const [Ischecked, setIsChecked] = useState<boolean>(false);
 
-  async function handleSubmit() {
+  function verifyFields() {
     if (email === '' || password === '' || repeatPassword === '') {
       alert('You must fill all the fields');
     } else if (password !== repeatPassword) {
@@ -23,9 +23,16 @@ const RegisterForm = () => {
     } else if (Ischecked === false) {
       alert('You must accept the terms and conditions');
     } else {
+      return true;
+    }
+    return false;
+  }
+
+  async function handleSubmit() {
+    if (verifyFields()) {
       try {
-        const x = await signUpUser(email, password);
-        alert(x);
+        const userSignUp = await signUpUser(email, password);
+        alert(userSignUp);
       } catch (error) {
         alert(error);
       }
@@ -56,7 +63,7 @@ const RegisterForm = () => {
           setPassword={setPassword}
           error={
             password.length < 6 && password.length > 0
-              ? 'La contraseña debe tener al menos 6 caracteres'
+              ? 'Password must have at least 6 characters'
               : ''
           }
         />
@@ -68,9 +75,7 @@ const RegisterForm = () => {
           setIsVisible={setPasswordRepeatVisible}
           setPassword={setRepeatPassword}
           error={
-            password !== repeatPassword && repeatPassword.length > 0
-              ? 'Las contraseñas no coinciden'
-              : ''
+            password !== repeatPassword && repeatPassword.length > 0 ? "Password doesn't match" : ''
           }
         />
 
