@@ -1,15 +1,11 @@
-import { useState } from 'react';
-import AuthHeader from '../components/auth/authHeader';
-import SliderButton from '../components/auth/SliderButton';
-import LoginForm from '../features/auth/loginForm';
-import RegisterForm from '../features/auth/registerForm';
+import AuthHeader from '@components/auth/authHeader';
+import SliderButton from '@components/auth/SliderButton';
+import LoginForm from '@features/auth/loginForm';
+import RegisterForm from '@features/auth/registerForm';
+import { useAuth } from '@hooks/authHook';
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState<boolean>(true);
-
-  const toggleForm = () => {
-    setIsLogin(!isLogin);
-  };
+  const { isLogin } = useAuth();
 
   return (
     <div className="bg- flex min-h-screen items-center justify-center bg-gray-300/30">
@@ -23,7 +19,7 @@ const AuthPage = () => {
           </header>
 
           <div>
-            <SliderButton IsLogin={isLogin} setCurrentWindow={toggleForm} />
+            <SliderButton IsLogin={isLogin} />
           </div>
 
           <div>{isLogin ? <LoginForm /> : <RegisterForm />}</div>

@@ -9,6 +9,7 @@ interface AlertProps extends AlertOptions {
   confirmButtonColor?: string;
   confirmButtonText: string;
   cancelButtonText: string;
+  onConfirm: () => void;
 }
 
 const MySwal = withReactContent(Swal);
@@ -23,5 +24,9 @@ export function ConfirmAlert(options: AlertProps) {
     cancelButtonColor: options.cancelButtonColor,
     confirmButtonText: options.confirmButtonText,
     cancelButtonText: options.cancelButtonText,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      options.onConfirm();
+    }
   });
 }

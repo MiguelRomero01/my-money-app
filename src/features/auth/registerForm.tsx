@@ -3,8 +3,12 @@ import InputText from '../../components/auth/inputText';
 import InputPassword from '../../components/auth/inputPassword';
 import Button from '../../components/auth/button';
 import { signUpUser } from './authService';
+import { simpleAlert } from '@components/alerts/simpleAlert';
+import { ConfirmAlert } from '@components/alerts/confirmAlerts';
+import { useAuth } from '@hooks/authHook';
 
 const RegisterForm = () => {
+  const { toggleLogin } = useAuth();
   const [PasswordVisible, setPasswordVisible] = useState<boolean>(false);
   const [passwordRepeatVisible, setPasswordRepeatVisible] = useState<boolean>(false);
 
@@ -16,25 +20,57 @@ const RegisterForm = () => {
   const [Ischecked, setIsChecked] = useState<boolean>(false);
 
   function verifyFields() {
-    if (email === '' || password === '' || repeatPassword === '') {
-      alert('You must fill all the fields');
-    } else if (password !== repeatPassword) {
-      alert("The passwords doesn't match");
-    } else if (Ischecked === false) {
-      alert('You must accept the terms and conditions');
-    } else {
-      return true;
+    const validations = [
+      {
+        condition: email === '' || password === '' || repeatPassword === '',
+        message: 'You must fill all the fields',
+      },
+      {
+        condition: password !== repeatPassword,
+        message: 'The passwords must match',
+      },
+      {
+        condition: !Ischecked,
+        message: 'You must accept the terms and conditions',
+      },
+    ];
+
+    const failedValidation = validations.find((v) => v.condition);
+    if (failedValidation) {
+      simpleAlert({
+        confirmButtonText: 'Ok',
+        text: failedValidation.message,
+        title: 'Error',
+        type: 'error',
+      });
+      return false;
     }
-    return false;
+
+    return true;
   }
 
   async function handleSubmit() {
     if (verifyFields()) {
       try {
         const userSignUp = await signUpUser(email, password);
-        alert(userSignUp);
-      } catch (error) {
-        alert(error);
+        ConfirmAlert({
+          cancelButtonText: 'Ok',
+          text: 'User created successfully',
+          title: 'Success',
+          confirmButtonText: 'Sign In',
+          type: 'success',
+          onConfirm: () => {
+            toggleLogin();
+          },
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        simpleAlert({
+          confirmButtonText: 'Ok',
+          text: error.message ?? 'Unexpected error',
+          title: 'Error',
+          type: 'error',
+        });
       }
     }
   }
