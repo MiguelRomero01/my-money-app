@@ -14,16 +14,14 @@ export async function signUpUser(email: string, password: string) {
 }
 
 export async function signInUser(email: string, password: string) {
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    if (error.message.includes('User already registered')) {
-      throw new Error('User already registered.');
-    } else if (error.status === 400) {
-      throw new Error('Please use a valid domain email.');
+    if (error.status === 400) {
+      throw new Error('Email or password is incorrect');
     }
-    throw new Error('An error occurred while signing up.');
+    throw new Error(error.message);
   }
 
-  return '¡Registro exitoso!';
+  return true;
 }

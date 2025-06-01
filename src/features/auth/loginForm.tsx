@@ -9,22 +9,47 @@ const LoginForm = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const [password, setPassword] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+
+  function verifyFields() {
+    const validations = [
+      {
+        condition: email === '' || password === '',
+        message: 'All fields are required',
+      },
+    ];
+    const failedValidation = validations.find((v) => v.condition);
+    if (failedValidation) {
+      simpleAlert({
+        confirmButtonText: 'Ok',
+        text: failedValidation.message,
+        title: 'Error',
+        type: 'error',
+      });
+      return false;
+    }
+    return true;
+  }
 
   async function handleSubmit() {
-    try {
-      const userSignIn = await signInUser(username, password);
-
-      if (!userSignIn) {
+    if (verifyFields()) {
+      try {
+        await signInUser(email, password);
         simpleAlert({
+          confirmButtonText: 'Ok',
+          text: 'You have been signed in',
+          title: 'Success',
+          type: 'success',
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        simpleAlert({
+          confirmButtonText: 'Ok',
+          text: error.message ?? 'Something went wrong',
           title: 'Error',
-          text: 'Your username or password is incorrect',
           type: 'error',
-          confirmButtonText: 'OK',
         });
       }
-    } catch (error) {
-      alert(error);
     }
   }
 
@@ -41,7 +66,7 @@ const LoginForm = () => {
           label="Email"
           type="email"
           placeholder="fakeUser123@email.com"
-          setUsername={setUsername}
+          setUsername={setEmail}
         />
 
         <InputPassword

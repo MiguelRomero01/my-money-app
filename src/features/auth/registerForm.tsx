@@ -52,7 +52,7 @@ const RegisterForm = () => {
   async function handleSubmit() {
     if (verifyFields()) {
       try {
-        const userSignUp = await signUpUser(email, password);
+        await signUpUser(email, password);
         ConfirmAlert({
           cancelButtonText: 'Ok',
           text: 'User created successfully',
