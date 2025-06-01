@@ -17,9 +17,6 @@ export async function signInUser(email: string, password: string) {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    if (error.status === 400) {
-      throw new Error('Email or password is incorrect');
-    }
     throw new Error(error.message);
   }
 
