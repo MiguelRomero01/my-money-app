@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import RegisterForm from '@features/auth/registerForm';
 import AuthPage from '@pages/authPage';
 import { AuthProvider } from '@helpers/contexts/AuthContext';
+import HomePage from '@pages/home';
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<AuthPage />} />
-          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/home" element={<HomePage />} />
         </Routes>
       </Router>
     </AuthProvider>
