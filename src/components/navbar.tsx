@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, User, Menu, X, ChevronLeft, ChevronRight, SunMoon } from 'lucide-react';
+import { ChevronDown, User, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Import navigationItems and menuItems where are icons and types
 import { navigationItems, menuItems } from '@helpers/types/navbar/navbarTypes';
+import { useGetUserHook } from '@hooks/getUserHook';
 
 const AsideDropdownMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { email, username } = useGetUserHook();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -95,7 +98,6 @@ const AsideDropdownMenu: React.FC = () => {
               className={`group flex w-full items-center rounded-lg bg-gray-50 px-4 py-3 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-gray-100 ${
                 isCollapsed ? 'justify-center lg:px-2' : 'justify-between'
               }`}
-              title={isCollapsed ? 'John Doe' : ''}
             >
               <div
                 className={`flex items-center ${isCollapsed ? 'lg:justify-center' : 'space-x-3'}`}
@@ -106,8 +108,8 @@ const AsideDropdownMenu: React.FC = () => {
                 <div
                   className={`text-left transition-all duration-300 ${isCollapsed ? 'lg:hidden' : ''}`}
                 >
-                  <p className="text-sm font-medium">John Doe</p>
-                  <p className="text-xs text-gray-500">john@example.com</p>
+                  <p className="text-sm font-medium">{username}</p>
+                  <p className="text-xs text-gray-500">{email}</p>
                 </div>
               </div>
               {!isCollapsed && (
@@ -121,8 +123,8 @@ const AsideDropdownMenu: React.FC = () => {
 
               {isCollapsed && (
                 <div className="invisible absolute left-full z-50 ml-2 hidden rounded bg-gray-800 px-3 py-2 text-xs whitespace-nowrap text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 lg:block">
-                  <div>John Doe</div>
-                  <div className="text-gray-300">john@example.com</div>
+                  <div>{username}</div>
+                  <div className="text-gray-300">{email}</div>
                 </div>
               )}
             </button>

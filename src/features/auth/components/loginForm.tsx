@@ -1,11 +1,17 @@
 import { useState } from 'react';
-import InputText from '../../components/auth/inputText';
-import InputPassword from '../../components/auth/inputPassword';
-import Button from '../../components/auth/button';
-import { signInUser } from './authService';
+import { useNavigate } from 'react-router-dom';
+
+//components
+import InputText from '@components/auth/inputText';
+import InputPassword from '@components/auth/inputPassword';
+import Button from '@components/auth/button';
+
+//services
+import { signInUser } from '../services/authService';
 import { simpleAlert } from '@components/alerts/simpleAlert';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const [password, setPassword] = useState<string>('');
@@ -35,12 +41,7 @@ const LoginForm = () => {
     if (verifyFields()) {
       try {
         await signInUser(email, password);
-        simpleAlert({
-          confirmButtonText: 'Ok',
-          text: 'You have been signed in',
-          title: 'Success',
-          type: 'success',
-        });
+        navigate('/home');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         simpleAlert({

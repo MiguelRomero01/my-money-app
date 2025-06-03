@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AuthPage from '@pages/authPage';
-import { AuthProvider } from '@helpers/contexts/AuthContext';
+import { AuthProvider } from '@helpers/contexts/auth/AuthContext';
 import HomePage from '@pages/home';
 
 function App() {
