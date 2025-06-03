@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Import icons
 import { ChevronDown, User, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Import navigationItems and menuItems where are icons and types
-import { navigationItems, menuItems } from '@helpers/types/navbar/navbarTypes';
+import { navigationItems } from '@helpers/types/navbar/navigationItems';
+import { userActions } from '@helpers/types/navbar/userActions';
+
+// Import hooks
 import { useGetUserHook } from '@hooks/getUserHook';
 
 const AsideDropdownMenu: React.FC = () => {
@@ -12,6 +18,7 @@ const AsideDropdownMenu: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { email, username } = useGetUserHook();
+  const navigate = useNavigate();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -138,7 +145,7 @@ const AsideDropdownMenu: React.FC = () => {
               }`}
             >
               <div className="py-2">
-                {menuItems.map((item, index) => {
+                {userActions.map((item, index) => {
                   const Icon = item.icon;
                   return (
                     <button
@@ -151,6 +158,7 @@ const AsideDropdownMenu: React.FC = () => {
                       onClick={() => {
                         setIsOpen(false);
                         item.onclick();
+                        navigate(item.href);
                       }}
                     >
                       <Icon size={16} className="mr-3" />
