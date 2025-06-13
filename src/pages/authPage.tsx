@@ -1,7 +1,7 @@
 import AuthHeader from '@components/auth/authHeader';
 import SliderButton from '@components/auth/SliderButton';
-import LoginForm from '@features/auth/loginForm';
-import RegisterForm from '@features/auth/registerForm';
+import LoginForm from '@features/auth/components/loginForm';
+import RegisterForm from '@features/auth/components/registerForm';
 import { useAuth } from '@hooks/authHook';
 
 const AuthPage = () => {

@@ -1,0 +1,18 @@
+import { getUser } from '@features/auth/services/getUser';
+import { useEffect, useState } from 'react';
+
+export function useGetUserHook() {
+  const [email, setEmail] = useState<string | null>(null);
+  const username = email?.split('@')[0];
+
+  useEffect(() => {
+    const getUserEffect = async () => {
+      const res = await getUser();
+      if (res) {
+        setEmail(res);
+      }
+    };
+    getUserEffect();
+  }, []);
+  return { email, username };
+}
