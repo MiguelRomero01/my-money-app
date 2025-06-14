@@ -7,20 +7,26 @@ import InputPassword from '@components/auth/inputPassword';
 import Button from '@components/auth/button';
 
 //services
-import { signInUser } from '../services/authService';
+import { signInUser } from '@services/database/queries/auth/createUser';
 import { simpleAlert } from '@components/alerts/simpleAlert';
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  const [ui, setUI] = useState({
+    isVisible: false,
+    loading: false,
+  });
+
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
 
   function verifyFields() {
     const validations = [
       {
-        condition: email === '' || password === '',
+        condition: form.email === '' || form.password === '',
         message: 'All fields are required',
       },
     ];
@@ -40,7 +46,8 @@ const LoginForm = () => {
   async function handleSubmit() {
     if (verifyFields()) {
       try {
-        await signInUser(email, password);
+        setUI((prev) => ({ ...prev, loading: true }));
+        await signInUser(form.email, form.password);
         navigate('/home');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -51,6 +58,7 @@ const LoginForm = () => {
           type: 'error',
         });
       }
+      setUI((prev) => ({ ...prev, loading: false }));
     }
   }
 
@@ -67,17 +75,17 @@ const LoginForm = () => {
           label="Email"
           type="email"
           placeholder="fakeUser123@email.com"
-          setUsername={setEmail}
+          setUsername={(value: string) => setForm((prev) => ({ ...prev, email: value }))}
         />
 
         <InputPassword
           label="Password"
           placeholder="•••••••"
-          isVisible={isVisible}
-          setIsVisible={setIsVisible}
-          setPassword={setPassword}
+          isVisible={ui.isVisible}
+          setIsVisible={(value: boolean) => setUI((prev) => ({ ...prev, isVisible: value }))}
+          setPassword={(value: string) => setForm((prev) => ({ ...prev, password: value }))}
         />
-        <Button label="Sign In" type="submit" />
+        <Button label="Sign In" type="submit" loading={ui.loading} />
       </form>
     </div>
   );

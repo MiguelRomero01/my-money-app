@@ -2,24 +2,39 @@ import { useState } from 'react';
 import InputText from '@components/auth/inputText';
 import InputPassword from '@components/auth/inputPassword';
 import Button from '@components/auth/button';
-import { signUpUser } from '../services/authService';
+import { signUpUser } from '@services/database/queries/auth/createUser';
 import { simpleAlert } from '@components/alerts/simpleAlert';
 import { ConfirmAlert } from '@components/alerts/confirmAlerts';
 import { useAuth } from '@hooks/authHook';
 
 const RegisterForm = () => {
   const { toggleLogin } = useAuth();
-  const [PasswordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [passwordRepeatVisible, setPasswordRepeatVisible] = useState<boolean>(false);
 
-  const [password, setPassword] = useState<string>('');
-  const [repeatPassword, setRepeatPassword] = useState<string>('');
+  // Un solo estado para los campos del formulario
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    repeatPassword: '',
+    isChecked: false,
+  });
 
-  const [email, setEmail] = useState<string>('');
+  // Un solo estado para visibilidad y loading
+  const [ui, setUI] = useState({
+    passwordVisible: false,
+    passwordRepeatVisible: false,
+    loading: false,
+  });
 
-  const [Ischecked, setIsChecked] = useState<boolean>(false);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  }
 
   function verifyFields() {
+    const { email, password, repeatPassword, isChecked } = form;
     const validations = [
       {
         condition: email === '' || password === '' || repeatPassword === '',
@@ -30,7 +45,7 @@ const RegisterForm = () => {
         message: 'The passwords must match',
       },
       {
-        condition: !Ischecked,
+        condition: !isChecked,
         message: 'You must accept the terms and conditions',
       },
     ];
@@ -52,7 +67,8 @@ const RegisterForm = () => {
   async function handleSubmit() {
     if (verifyFields()) {
       try {
-        await signUpUser(email, password);
+        setUI((prev) => ({ ...prev, loading: true }));
+        await signUpUser(form.email, form.password);
         ConfirmAlert({
           cancelButtonText: 'Ok',
           text: 'User created successfully',
@@ -63,7 +79,6 @@ const RegisterForm = () => {
             toggleLogin();
           },
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         simpleAlert({
           confirmButtonText: 'Ok',
@@ -72,6 +87,7 @@ const RegisterForm = () => {
           type: 'error',
         });
       }
+      setUI((prev) => ({ ...prev, loading: false }));
     }
   }
 
@@ -88,17 +104,17 @@ const RegisterForm = () => {
           label="Email"
           type="email"
           placeholder="fakeUser123@email.com"
-          setUsername={setEmail}
+          setUsername={(value: string) => setForm((prev) => ({ ...prev, email: value }))}
         />
 
         <InputPassword
           label="Password"
           placeholder="•••••••"
-          isVisible={PasswordVisible}
-          setIsVisible={setPasswordVisible}
-          setPassword={setPassword}
+          isVisible={ui.passwordVisible}
+          setIsVisible={(v: boolean) => setUI((prev) => ({ ...prev, passwordVisible: v }))}
+          setPassword={(value: string) => setForm((prev) => ({ ...prev, password: value }))}
           error={
-            password.length < 6 && password.length > 0
+            form.password.length < 6 && form.password.length > 0
               ? 'Password must have at least 6 characters'
               : ''
           }
@@ -107,19 +123,22 @@ const RegisterForm = () => {
         <InputPassword
           label="Repeat Password"
           placeholder="•••••••"
-          isVisible={passwordRepeatVisible}
-          setIsVisible={setPasswordRepeatVisible}
-          setPassword={setRepeatPassword}
+          isVisible={ui.passwordRepeatVisible}
+          setIsVisible={(v: boolean) => setUI((prev) => ({ ...prev, passwordRepeatVisible: v }))}
+          setPassword={(value: string) => setForm((prev) => ({ ...prev, repeatPassword: value }))}
           error={
-            password !== repeatPassword && repeatPassword.length > 0 ? "Password doesn't match" : ''
+            form.password !== form.repeatPassword && form.repeatPassword.length > 0
+              ? "Password doesn't match"
+              : ''
           }
         />
 
         <label>
           <input
             type="checkbox"
-            checked={Ischecked}
-            onChange={(e) => setIsChecked(e.target.checked)}
+            name="isChecked"
+            checked={form.isChecked}
+            onChange={handleChange}
             className="mr-1 cursor-pointer"
           />
           I agree to the{' '}
@@ -128,7 +147,7 @@ const RegisterForm = () => {
           </a>
         </label>
 
-        <Button label="Sign Up" type="submit" />
+        <Button label="Sign Up" type="submit" loading={ui.loading} />
       </form>
     </div>
   );

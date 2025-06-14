@@ -16,7 +16,8 @@
       "@hooks/*": ["src/hooks/*"],
       "@helpers/*": ["src/helpers/*"],
       "@pages/*": ["src/pages/*"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@animations/*": ["src/animations/*"]
     },
 
     /* Bundler mode */
