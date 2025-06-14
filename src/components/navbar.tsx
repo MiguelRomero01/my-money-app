@@ -40,7 +40,7 @@ const AsideDropdownMenu: React.FC = () => {
   }, [isCollapsed]);
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="font-inter flex min-h-screen bg-gray-50">
       {/* Aside Navigation */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 transform bg-white shadow-lg transition-all duration-300 ease-in-out lg:static lg:inset-0 lg:translate-x-0 ${

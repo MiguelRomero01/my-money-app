@@ -8,7 +8,7 @@ const AuthPage = () => {
   const { isLogin } = useAuth();
 
   return (
-    <div className="bg- flex min-h-screen items-center justify-center bg-gray-300/30">
+    <div className="bg- flex min-h-screen items-center justify-center bg-gray-300/30 font-inter">
       <div className="w-full max-w-md px-5">
         <div className="ease-in-out0 overflow-hidden rounded-2xl bg-white/90 shadow-xl backdrop-blur-lg transition-all duration-300">
           <header>
