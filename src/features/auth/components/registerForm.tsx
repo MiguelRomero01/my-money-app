@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InputText from '@components/auth/inputText';
 import InputPassword from '@components/auth/inputPassword';
 import Button from '@components/auth/button';
-import { signUpUser } from '../services/authService';
+import { signUpUser } from '@services/database/queries/auth/createUser';
 import { simpleAlert } from '@components/alerts/simpleAlert';
 import { ConfirmAlert } from '@components/alerts/confirmAlerts';
 import { useAuth } from '@hooks/authHook';

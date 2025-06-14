@@ -7,7 +7,7 @@ import InputPassword from '@components/auth/inputPassword';
 import Button from '@components/auth/button';
 
 //services
-import { signInUser } from '../services/authService';
+import { signInUser } from '@services/database/queries/auth/createUser';
 import { simpleAlert } from '@components/alerts/simpleAlert';
 
 const LoginForm = () => {

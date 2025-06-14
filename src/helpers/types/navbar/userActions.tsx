@@ -1,6 +1,6 @@
 import { LogOut, Settings } from 'lucide-react';
 import { simpleAlert } from '@components/alerts/simpleAlert';
-import { signOut } from '@features/auth/services/signOut';
+import { signOut } from '@services/database/auth/signOut';
 
 export const userActions = [
   {

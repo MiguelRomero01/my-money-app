@@ -1,4 +1,4 @@
-import { getUser } from '@features/auth/services/getUser';
+import { getUser } from '@services/database/queries/users/getUser';
 import { useEffect, useState } from 'react';
 
 export function useGetUserHook() {
