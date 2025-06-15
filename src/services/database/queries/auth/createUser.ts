@@ -1,4 +1,5 @@
 import { supabase } from '@services/database/dbConnection';
+import { putIdUser } from '../users/putIdUser';
 
 export async function signUpUser(email: string, password: string) {
   const { error } = await supabase.auth.signUp({
@@ -8,17 +9,8 @@ export async function signUpUser(email: string, password: string) {
 
   if (error) {
     throw new Error(error.message);
+  } else {
+    putIdUser();
+    return 'User registered successfully!';
   }
-
-  return 'User registered successfully!';
-}
-
-export async function signInUser(email: string, password: string) {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return true;
 }

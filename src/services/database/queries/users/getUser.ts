@@ -1,13 +1,11 @@
 import { supabase } from '@services/database/dbConnection';
 
 export async function getUser() {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+  const { data, error } = await supabase.auth.getUser();
 
-  if (error) {
-    return 'User not found';
+  if (error || !data.user) {
+    return null;
   }
-  return user?.email;
+
+  return data.user;
 }

@@ -9,7 +9,7 @@ export function useGetUserHook() {
     const getUserEffect = async () => {
       const res = await getUser();
       if (res) {
-        setEmail(res);
+        setEmail(res?.email ?? null);
       }
     };
     getUserEffect();
